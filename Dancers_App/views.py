@@ -1,12 +1,6 @@
-#import the Flask class from the flask package
-from distutils.log import error
-from wsgiref.util import application_uri
 from flask import Flask, render_template, request, Response, session, flash, redirect, url_for, jsonify
 from functools import wraps
-from _config import DATABASE_PATH
-from models import Venue
-from datetime import date
-
+#configure
 #create the application object
 app = Flask(__name__, template_folder='templates')
 
@@ -32,14 +26,14 @@ def login_required(test):
             return redirect(url_for('login'))
     return wrap
 
-# route handlers
+#route handlers
 @app.route('/logout/')
 def logout():
     session.pop('logged_in', None)
     flash('Goodbye!')
     return redirect(url_for('login'))
 
-@app.route('/', methods=['GET', 'POST'])
+@app.rout('/', methods=['GET','POST'])
 def login():
     if request.method == 'POST':
         if request.form['username'] != app.config['USERNAME'] \
@@ -50,9 +44,4 @@ def login():
             session['logged_in'] = True
             flash('Welcome!')
             return redirect(url_for('tasks'))
-    return render_template('login.html')
-
-
-# start the development server using the run() method
-if __name__ == "__main__":
-    app.run()        
+    return render_template('login.html')    

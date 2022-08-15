@@ -8,7 +8,9 @@ DEBUG = True
 
 # Connect to the database
 # IMPLEMENT DATABASE URL
-#SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:#Datascience1@localhost:5432/postgres'
+SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:#Datascience1@localhost:5432/application'
 DATABASE = 'postgresql.db'
 USERNAME = 'postgres'
 PASSWORD = '#Datascience1'
+WTF_CSRF_ENABLED = True
+DATABASE_PATH = os.path.join(basedir, DATABASE)
