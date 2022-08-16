@@ -80,6 +80,11 @@ body {
     background: #CEE5F5;
     padding: 0.5em;
   }
+
+  .add-task {
+    font-size: 0.9em;
+    border-bottom: 1px solid #ccc;
+  }
   
   .error {
     background: #F0D6D6;
@@ -146,4 +151,13 @@ body {
     margin: 0;
     text-decoration:none;
     position:relative;
+  }
+
+  .inline-form .input-group{
+    display: inline-block;
+    margin: 10px 5px;
+  }
+  
+  .input-group input {
+    width: 100%;
   }

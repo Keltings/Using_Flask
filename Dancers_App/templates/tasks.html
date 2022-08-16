@@ -1,44 +1,28 @@
 {% extends "_base.html" %}
 {% block content %}
 
-<h1>Welcome Dancer!</h1>
+<h1>Welcome Dancer</h1>
+<br>
 <a href="{{ url_for('logout') }}">Logout</a>
 <div class="add-task">
-  <h3>Add a new Dancer:</h3>
-  <table>
-    <tr>
-      <form action="{{ url_for('new_task') }}" method="post">
-        {{ form.csrf_token }}
-        <td>
-          <label>Name:</label>
-          <input name="name" type="text">
-        </td>
-        <td>
-          <label>Date Joined (mm/dd/yyyy):</label>
-          <input name="date_performing" type="text" style="width:160px;">
-        </td>
-        <td>
-            <label>Genres:</label>
-            <select name="Genres" width="100px">
-              <option value="1">Salsa</option>
-              <option value="2">Bachata</option>
-              <option value="3">Kizomba</option>
-              <option value="4">Hiphop</option>
-              <option value="5">Zhumba</option>
-              <option value="6">African</option>
-              <option value="8">Waltz</option>
-              <option value="9">Chacha</option>
-              <option value="10">Other</option>
-            </select>
-        </td>
-        <td>
-          &nbsp;
-          &nbsp;
-          <input class="button" type="submit" value="Save">
-        </td>
-      </form>
-    </tr>
-  </table>
+  <h3>Add a new task:</h3>
+  <form action="{{ url_for('new_task') }}" method="post" class="inline-form">
+    {{ form.csrf_token }}
+    <div class="input-group">
+      {{ form.dancer_name.label }}
+      {{ form.dancer_name }}
+    </div>
+    <div class="input-group">
+      {{ form.performance_date.label }}
+      {{ form.performance_date }}
+    </div>
+    <div class="input-group">
+      {{ form.genre.label }}
+      {{ form.genre }}
+    </div>
+    <div class="input-group">
+      <button type="submit">Submit</button>
+    </div>
 </div>
 <div class="entries">
   <br>
@@ -48,48 +32,56 @@
     <table>
       <thead>
         <tr>
-          <th width="300px"><strong>Dancer Name</strong></th>
-          <th width="100px"><strong>Perfromance Date</strong></th>
+          <th width="200px"><strong>Dancer Name</strong></th>
+          <th width="75px"><strong>Performance Date</strong></th>
+          <th width="100px"><strong>Posted Date</strong></th>
           <th width="50px"><strong>Genre</strong></th>
+          <th width="90px"><strong>Posted By</strong></th>
           <th><strong>Actions</strong></th>
         </tr>
       </thead>
       {% for task in open_tasks %}
         <tr>
-          <td width="300px">{{ task.dancer_name }}</td>
-          <td width="100px">{{ task.performance_date }}</td>
+          <td width="200px">{{ task.dancer_name }}</td>
+          <td width="75px">{{ task.performance_date }}</td>
+          <td width="100px">{{ task.posted_date }}</td>
           <td width="50px">{{ task.genre }}</td>
+          <td width="90px">{{ task.poster.dancer_name }}</td>
           <td>
-            <a href="{{ url_for('delete_entry', task_id = task.task_id) }}">Delete</a>  -
+            <a href="{{ url_for('delete_entry', task_id = task.task_id) }}">Delete</a> 
             <a href="{{ url_for('complete', task_id = task.task_id) }}">Mark as Complete</a>
           </td>
         </tr>
       {% endfor %}
     </table>
   </div>
-  <br>
-  <br>
 </div>
+<br>
+<br>
 <div class="entries">
   <h2>Closed tasks:</h2>
   <div class="datagrid">
     <table>
       <thead>
-      <tr>
-        <th width="300px"><strong>Dancer Name</strong></th>
-        <th width="100px"><strong>Perfromance Date</strong></th>
-        <th width="50px"><strong>Priority</strong></th>
-        <th><strong>Actions</strong></th>
+        <tr>
+          <th width="200px"><strong>Dancer Name</strong></th>
+          <th width="75px"><strong>Performance Date</strong></th>
+          <th width="100px"><strong>Posted Date</strong></th>
+          <th width="50px"><strong>Genre</strong></th>
+          <th width="90px"><strong>Posted By</strong></th>
+          <th><strong>Actions</strong></th>
         </tr>
       </thead>
       {% for task in closed_tasks %}
         <tr>
-          <td width="300px">{{ task.dancer_name }}</td>
-          <td width="100px">{{ task.performance_date }}</td>
+          <td width="200px">{{ task.dancer_name }}</td>
+          <td width="75px">{{ task.performance_date }}</td>
+          <td width="100px">{{ task.posted_date }}</td>
           <td width="50px">{{ task.genre }}</td>
-        <td>
-          <a href="{{ url_for('delete_entry', task_id = task.task_id) }}">Delete</a>
-        </td>
+          <td width="90px">{{ task.poster.dancer_name }}</td>
+          <td>
+             <a href="{{ url_for('delete_entry', task_id = task.task_id) }}">Delete</a>
+          </td>
         </tr>
       {% endfor %}
     </table>

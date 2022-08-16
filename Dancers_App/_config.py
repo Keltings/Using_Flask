@@ -13,8 +13,8 @@ DEBUG = True
 # IMPLEMENT DATABASE URL
 SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:#Datascience1@localhost:5432/application'
 DATABASE = 'postgresql.db'
-USERNAME = 'postgres'
-PASSWORD = '#Datascience1'
+#USERNAME = 'postgres'
+#PASSWORD = '#Datascience1'
 
 #makes the app more secure
 WTF_CSRF_ENABLED = True
