@@ -3,9 +3,11 @@ from flask import Flask, render_template, request, g, Response, session, flash, 
 from functools import wraps
 from forms import AddTaskForm, RegisterForm, LoginForm
 from models import Dance, User
+from flask_wtf import Form
 from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 import datetime
-import os
+import sys
 
 #configure
 #create the application object
@@ -14,8 +16,9 @@ app = Flask(__name__, template_folder='templates')
 # pulls in app configuration from this module
 app.config.from_object('_config')
 db = SQLAlchemy(app)
-#db.init_app(app)
-#migrate = Migrate(app, db)
+migrate = Migrate(app, db)
+
+
 
 #connect to a local postgresql database
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:#Datascience1@localhost:5432/application'
@@ -42,7 +45,7 @@ def logout():
     flash('Bye!')
     return redirect(url_for('login'))
 
-#One view mapped to the main url
+#On view mapped to the main url
 @app.route('/', methods=['GET','POST'])
 def login():
     error = None
@@ -61,9 +64,28 @@ def login():
         else:
             error = 'Both fields are required'
             
-    return render_template('login.html', form=form, erro=error) 
+    return render_template('login.html', form=form, erro=error)
+
+# the register home page    
+@app.route('/register/', methods=['GET', 'POST'])
+def register():
+    error = None
+    form = RegisterForm(request.form)
+    if request.method == 'POST':
+        if form.validate():
+            new_user = User(
+                form.name.data,
+                form.email.data,
+                form.password.data,
+            )
+            db.session.add(new_user)
+            db.session.commit()
+            flash('Thanks for registering. Please login.')
+            return redirect(url_for('login'))
+    return render_template('register.html',form=form, error=error)     
 
 
+#inside the application after login in 
 @app.route('/tasks/')
 @login_required
 def tasks():
@@ -82,7 +104,7 @@ def tasks():
 @app.route('/add/', methods=['POST', 'GET'])
 @login_required
 def new_task():
-error = False
+    error = False
     form = AddTaskForm(request.form)
     if request.method == 'POST':
         if form.validate():
@@ -108,7 +130,7 @@ error = False
                 print(sys.exc_info())  
             finally:
                 db.session.close()
-    return redirect(url_for('tasks'))      
+        return redirect(url_for('tasks'))      
     return render_template('tasks.html', form=form)
 
 # Mark tasks as complete
@@ -118,6 +140,7 @@ def complete(task_id):
     new_id = task_id
     db.session.query(Dance).filter_by(task_id=new_id).update({"status": "0"})
     db.session.commit()
+    #db.session.close()
     flash('The task is complete. Nice.')
     return redirect(url_for('tasks'))
 
@@ -132,20 +155,12 @@ def delete_entry(task_id):
     return redirect(url_for('tasks'))
 
 
-@app.route('/register/', methods=['GET', 'POST'])
-def register():
-    error = None
-    form = RegisterForm(request.form)
-    if request.method == 'POST':
-        if form.validate():
-            new_user = User(
-                form.name.data,
-                form.email.data,
-                form.password.data,
-            )
-            db.session.add(new_user)
-            db.session.commit()
-            flash('Thanks for registering. Please login.')
-            return redirect(url_for('login'))
-    return render_template('register.html',form=form, error=error)
-        
+
+
+
+
+
+
+#always include this at the bottom of your code
+if __name__ == '__main__':
+   app.run(host="0.0.0.0")

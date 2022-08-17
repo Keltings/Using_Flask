@@ -11,11 +11,11 @@ class AddTaskForm(Form):
         validators=[DataRequired()], format='%m/%d/%Y'
     )
     genre = SelectField(
-        'genre',
+        'Genre',
         validators=[DataRequired()],
         choices=[
-            ('1', '1'), ('2', '2'), ('3', '3'), ('4', '4'), ('5', '5'),
-            ('6', '6'), ('7', '7'), ('8', '8'), ('9', '9'), ('10', '10')
+            ('Salsa', 'Salsa'), ('Kizomba', 'Kizomba'), ('Bachata', 'Bachata'), ('Semba', 'Semba'), ('Hiphop', 'Hiphop'),
+            ('African', 'African'), ('Ballet', 'Ballet'), ('B-boy', 'B-boy'), ('Chacha', 'Chacha'), ('Other', 'Other')
         ]
     )
     status = IntegerField('Status')

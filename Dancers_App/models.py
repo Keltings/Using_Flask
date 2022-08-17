@@ -14,7 +14,8 @@ app = Flask(__name__, template_folder='templates')
 # pulls in app configuration from this module
 app.config.from_object('_config')
 db = SQLAlchemy(app)
-#db.init_app(app)
+
+
 migrate = Migrate(app, db)
 
 #connect to a local postgresql database
@@ -29,7 +30,7 @@ class Dance(db.Model):
     task_id = db.Column(db.Integer, primary_key=True)
     dancer_name = db.Column(db.String(120), nullable=False)
     performance_date = db.Column(db.Date, nullable=False)
-    genre = db.Column(db.Integer, nullable=False)
+    genre = db.Column(db.String(), nullable=False)
     status = db.Column(db.Integer)
     posted_date = db.Column(db.Date, default=datetime.datetime.utcnow())
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
@@ -61,5 +62,12 @@ class User(db.Model):
     def __repr__(self):
         return '<User {0}>'.format(self.name)
 
-db.create_all()
+##db.create_all()
 
+
+
+# insert data
+#db.session.add(Dance("Finish this tutorial", date(2016, 9, 22), 10, 1))
+#db.session.add(Dance("Finish Real Python", date(2016, 10, 3), 10, 1))
+# commit the changes
+#db.session.commit()

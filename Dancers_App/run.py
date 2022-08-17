@@ -2,6 +2,6 @@
 create a separate file In order to remove unnecessary code from the controller
 that does not pertain to the actual business logic. """
 
-from views import app
+#from views import app#
 
-app.run(debug=True)
+#app.run(debug=True)
